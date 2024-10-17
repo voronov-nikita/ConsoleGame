@@ -12,6 +12,12 @@ class Wizard(): Human() {
         this.health += this.level * 2
     }
 
+    override fun getDamage(damage: Int){
+        this.health -= damage;
+    }
 
+    override fun printStat() {
+        println("Характеристики игрока:\n\t| Здоровье: ${this.health}\n\t| Уровень: ${this.level}\n\t| Сила: ${this.power}\n\n")
+    }
 
 }

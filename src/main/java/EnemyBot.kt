@@ -8,43 +8,49 @@ open class EnemyBot(private var heroLevel: Int) {
     var level: Int = (1 * heroLevel..5 * heroLevel).random()
     var armor: Int = ((0..1).random()) / 10
 
+    // функция инициализации врага перед игроком
+    open fun initEnemy(){
+        println("Вам встретился ${this.name}\n")
+    }
+
+    /**
+     * Вывод информации о текущем состоянии бота
+     */
+    open fun printStat() {
+        println("Характеристики ${this.name}:\n\t| Здоровье: ${this.health}\n\t| Уровень: ${this.level}\n\t| Сила: ${this.power}\n\n")
+    }
+
+    /**
+    Функция атаки врага
+     Вернет значение, которое нужно отнять у игрока
+     */
     open fun attack(): Int {
         val res = this.level * this.power
-        println("${this.name} Атакует! Сила удара: $res")
+        println("${this.name} атакует! Сила удара: $res")
         return res
     }
 
-    private fun getHealth() {
+    /**
+    Функция исцеления бота
+     */
+    open fun getHealth() {
         this.health += (this.level / 10) + 1
         println("${this.name} излечился. Теперь его здоровье: ${this.health}")
     }
 
-    private fun protection(): Boolean {
-        val res = arrayOf(true, false)[(0..1).random()]
-        if (res) {
-            println("Противник увернулся от удара. Его здровье: ${this.health}")
-        } else {
-            getDamage(10);
-            println("Точное попадание! Здровье противника: ${this.health}")
-        }
-        return res
+    /**
+     * Функция защиты.
+     * Противник не получил урона
+     */
+    open fun protection() {
+        println("Противник увернулся от удара. Его здровье: ${this.health}")
     }
 
-    //    функция получения урона
+    /**
+     * Функция получение урона
+     */
     open fun getDamage(power: Int) {
         this.health -= power * (1 - this.armor)
-    }
-
-    //  Функция вызова действия у бота
-//  На выбор есть 3 функции, соответсвенно при равном шансе это ~33.3% на каждое отдельное действие
-    open fun action() {
-        val chance: Int = (1..3).random()
-
-        when (chance) {
-            1 -> attack()
-            2 -> getHealth()
-            3 -> protection()
-        }
     }
 
 
