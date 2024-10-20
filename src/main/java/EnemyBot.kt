@@ -9,20 +9,20 @@ open class EnemyBot(private var heroLevel: Int) {
     var armor: Int = ((0..1).random()) / 10
 
     // функция инициализации врага перед игроком
-    open fun initEnemy(){
-        println("Вам встретился ${this.name}\n")
+    open fun initEnemy() {
+        println("Вам встретился ${this.name}")
     }
 
     /**
      * Вывод информации о текущем состоянии бота
      */
     open fun printStat() {
-        println("Характеристики ${this.name}:\n\t| Здоровье: ${this.health}\n\t| Уровень: ${this.level}\n\t| Сила: ${this.power}\n\n")
+        println("Характеристики ${this.name}:\n\t| Здоровье: ${this.health}\n\t| Уровень: ${this.level}\n\t| Сила: ${this.power}\n")
     }
 
     /**
     Функция атаки врага
-     Вернет значение, которое нужно отнять у игрока
+    Вернет значение, которое нужно отнять у игрока
      */
     open fun attack(): Int {
         val res = this.level * this.power
@@ -47,10 +47,16 @@ open class EnemyBot(private var heroLevel: Int) {
     }
 
     /**
-     * Функция получение урона
+     * Функция получение урона.
+     * Есть шанс, что противнику удасться увернуться от удара
      */
     open fun getDamage(power: Int) {
-        this.health -= power * (1 - this.armor)
+        val protChance: Int = (1..5).random()
+        if (protChance == 3) {
+            protection()
+        }else{
+            this.health -= power * (1 - this.armor)
+        }
     }
 
 

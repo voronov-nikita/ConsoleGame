@@ -39,20 +39,20 @@ fun printActions() {
 /**
  * Функция вывода в терминал вариантов действий при сражении (после того, как герой встретил врага)
  * */
-fun printFightActions(){
+fun printFightActions() {
     println("Выберите действие:\n[1] Атака\n[2] Лечение\n[3] Убегаю")
 }
 
 /**
-* Механика боя со случайным врагом.
+ * Механика боя со случайным врагом.
  * Требуется передать пераметр @param pers
  */
-fun generateNewEnemy(pers: Any): Boolean{
-
+fun generateNewEnemy(pers: Any): Boolean {
+    println("----------------- Режим битвы включен -------------")
     // переопределение игрока по
     val hero = when (pers::class) {
-        Wizard::class-> Wizard();
-        Robot::class-> Robot();
+        Wizard::class -> Wizard();
+        Robot::class -> Robot();
         Knight::class -> Knight();
         else -> return false;
     }
@@ -61,7 +61,7 @@ fun generateNewEnemy(pers: Any): Boolean{
     val enemy: EnemyBot = EnemyBot(hero.level)
     enemy.initEnemy()
 
-    while (hero.health>0 && enemy.health > 0){
+    while (hero.health > 0 && enemy.health > 0) {
 
         // вывод параметров
         enemy.printStat()
@@ -71,28 +71,32 @@ fun generateNewEnemy(pers: Any): Boolean{
         printFightActions()
         // выбираем действие
         val heroAct = readln()
-        when (heroAct){
+        when (heroAct) {
             "1" -> enemy.getDamage(hero.attack())
             "2" -> hero.getHealth()
+            "3" -> if (hero.run()) break else {hero.getDamage(enemy.attack()); continue}
         }
 
         // <----------- ДАЛЕЕ ХОДИТ БОТ --------------->
 
-        // пусть действие врага будут случайными
-        val enemyAct = (1..3).random()
-        when (enemyAct){
-            1 -> hero.getDamage(enemy.attack())
-            2 -> enemy.getHealth()
-            3 -> enemy.protection()
+        // враг может ходить только если у него осталось здоровье
+        if (enemy.health > 0) {
+            // пусть действие врага будут случайными
+            val enemyAct = (1..3).random()
+            when (enemyAct) {
+                1 -> hero.getDamage(enemy.attack())
+                2 -> enemy.getHealth()
+                3 -> enemy.protection()
+            }
         }
 
     }
 
-    if (hero.health < 0){
+    if (hero.health < 0) {
         println("ПОРАЖЕНИЕ!\nВы погибли, начинайте сначала.\n")
         return false;
     }
-    if (enemy.health < 0){
+    if (enemy.health < 0) {
         println("ПОЗДРАВЛЯЮ!\nВы победили, уровень увеличен.\n")
     }
     // функция вернет true если игрок остался живым
